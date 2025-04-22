@@ -66,3 +66,12 @@ print(address_table)
 
 print("\nInstructions (without labels):")
 print(instructions)
+# Pass 1 is a preparatory phase where:
+#
+#    # The symbol table is built, containing labels and their corresponding memory addresses.
+#
+#    # The address allocation for instructions is completed, providing placeholders for machine code translation.
+#
+#    # Pass 1 does not generate executable machine code, but it lays the groundwork for Pass 2, where the actual translation of symbolic instructions into machine code occurs.
+#
+#    # Without Pass 1, we wouldn’t have the necessary information to handle labels and addresses during the actual code generation in Pass 2, making it a crucial first step in the two-pass assembly process.
