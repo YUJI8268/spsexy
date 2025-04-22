@@ -44,3 +44,4 @@ int main() {
 gcc lex.yy.c -o count -ll
 ./count
 */
+//In conclusion, the program implemented using LEX effectively counts the various elements present in the input text, such as characters, words, sentences, lines, tabs, numbers, and blank spaces. By leveraging regular expressions and the pattern-matching capabilities of LEX, the program identifies and counts each type of element in an efficient manner. This approach can be adapted for various text processing tasks, and the modular nature of LEX allows for easy expansion or modification of the program to handle additional requirements or specific types of text analysis. Overall, the program provides a robust solution for analyzing and counting different components of text input in a systematic way.
