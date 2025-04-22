@@ -76,3 +76,4 @@ for line in output_code:
 print("\nStatistical Output:")
 for key, value in stats.items():
     print(f"{key.replace('_', ' ').title()}: {value}")
+#Using macros in assembly language allows for efficient and structured code reuse. By defining a macro without arguments, we make the program more readable and maintainable. The macro expansion process automatically inserts the defined code wherever the macro is invoked, saving both time and effort in writing repetitive code. However, care should be taken to avoid excessive macro use, as it can result in larger executable sizes and more complex debugging.
