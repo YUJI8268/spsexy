@@ -71,3 +71,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+#This experiment helped in understanding the importance of FIRST set computation in Context-Free Grammars (CFGs). By implementing the program, we were able to systematically compute FIRST sets for each non-terminal, which is crucial for building parsing tables in syntax analysis. Computing FIRST sets is a fundamental concept in compiler design, especially in LL(1) parsers, where it aids in predicting which rule to apply based on the current input symbol. This experiment reinforced the use of recursive algorithms and set theory in developing efficient parsing algorithms and demonstrated the role of FIRST sets in ensuring the correctness and efficiency of compilers
