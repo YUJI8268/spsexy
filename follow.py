@@ -71,3 +71,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+#This experiment provided an in-depth understanding of the FOLLOW set computation in Context-Free Grammars (CFGs). By implementing the program, we were able to systematically compute FOLLOW sets for each non-terminal, which are essential for building parsing tables and analyzing the structure of a grammar. Understanding FOLLOW sets is a fundamental part of compiler construction, especially in syntax analysis, where it directly influences the design and efficiency of parsing algorithms. This experiment reinforced the importance of iterative algorithms and set theory in compiler design.
