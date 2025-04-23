@@ -1,74 +1,74 @@
 from collections import defaultdict
 
-# Function to parse input grammar
-def parse_grammar():
-    grammar = defaultdict(list)
-    print("Enter grammar productions (e.g., A -> aB | ε). Type 'END' to finish:\n")
+# Function to compute FIRST sets
+def compute_first(grammar):
+    first = defaultdict(set)
+
+    def first_of(symbol):
+        if symbol not in grammar:
+            return {symbol}  # Terminal
+        if symbol in first and first[symbol]:
+            return first[symbol]
+
+        result = set()
+        for production in grammar[symbol]:
+            if production == ['ε']:
+                result.add('ε')
+                continue
+            for sym in production:
+                sym_first = first_of(sym)
+                result.update(sym_first - {'ε'})
+                if 'ε' not in sym_first:
+                    break
+            else:
+                result.add('ε')
+        first[symbol] = result
+        return result
+
+    for non_terminal in grammar:
+        first_of(non_terminal)
+
+    return first
+
+# Function to compute FOLLOW sets
+def compute_follow(grammar, start_symbol):
+    follow = defaultdict(set)
+    first = compute_first(grammar)
+
+    follow[start_symbol].add('$')  # End marker
 
     while True:
-        line = input()
-        if line.strip().upper() == 'END':
+        updated = False
+        for lhs in grammar:
+            for production in grammar[lhs]:
+                for i, B in enumerate(production):
+                    if B in grammar:  # B is non-terminal
+                        follow_before = follow[B].copy()
+                        # Check symbols after B
+                        for symbol in production[i+1:]:
+                            first_of_symbol = first[symbol]
+                            follow[B].update(first_of_symbol - {'ε'})
+                            if 'ε' in first_of_symbol:
+                                continue
+                            break
+                        else:
+                            follow[B].update(follow[lhs])
+                        if follow_before != follow[B]:
+                            updated = True
+        if not updated:
             break
-        if '->' not in line:
-            print("Invalid format. Use A -> aB | ε")
-            continue
-        head, body = line.split('->')
-        head = head.strip()
-        productions = body.strip().split('|')
-        for prod in productions:
-            grammar[head].append(prod.strip())
+    return follow
 
-    return grammar
+# Example usage
+grammar = {
+    'S': [['A', 'B']],
+    'A': [['a'], ['ε']],
+    'B': [['b']]
+}
 
-# Recursive function to compute FIRST set
-def compute_first(symbol, grammar, FIRST, terminals):
-    # If symbol is a terminal, its FIRST is itself
-    if symbol in terminals:
-        return {symbol}
+start_symbol = 'S'
+follow_sets = compute_follow(grammar, start_symbol)
 
-    # If FIRST already computed, return it
-    if FIRST[symbol]:
-        return FIRST[symbol]
-
-    for production in grammar[symbol]:
-        if production == 'ε':
-            FIRST[symbol].add('ε')
-        else:
-            for i in range(len(production)):
-                sym = production[i]
-                temp_first = compute_first(sym, grammar, FIRST, terminals)
-                FIRST[symbol].update(temp_first - {'ε'})
-                if 'ε' not in temp_first:
-                    break
-                if i == len(production) - 1:
-                    FIRST[symbol].add('ε')
-
-    return FIRST[symbol]
-
-def main():
-    grammar = parse_grammar()
-
-    non_terminals = list(grammar.keys())
-    terminals = set()
-
-    # Identify terminals
-    for prods in grammar.values():
-        for prod in prods:
-            for ch in prod:
-                if not ch.isupper() and ch != 'ε':
-                    terminals.add(ch)
-
-    FIRST = defaultdict(set)
-
-    # Compute FIRST for each non-terminal
-    for nt in non_terminals:
-        compute_first(nt, grammar, FIRST, terminals)
-
-    # Display results
-    print("\nFIRST Sets:")
-    for nt in non_terminals:
-        print(f"FIRST({nt}) = {{ {', '.join(FIRST[nt])} }}")
-
-if __name__ == "__main__":
-    main()
-#This experiment provided an in-depth understanding of the FOLLOW set computation in Context-Free Grammars (CFGs). By implementing the program, we were able to systematically compute FOLLOW sets for each non-terminal, which are essential for building parsing tables and analyzing the structure of a grammar. Understanding FOLLOW sets is a fundamental part of compiler construction, especially in syntax analysis, where it directly influences the design and efficiency of parsing algorithms. This experiment reinforced the importance of iterative algorithms and set theory in compiler design.
+print("FOLLOW sets:")
+for non_terminal, follow in follow_sets.items():
+    print(f"FOLLOW({non_terminal}) = {follow}")
